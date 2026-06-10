@@ -6,6 +6,7 @@ import com.example.bankmanagementsystem.Service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,20 +29,15 @@ public class UserController {
         return ResponseEntity.status(200).body(userService.getAllUsers());
     }
 
-    @GetMapping("/get/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Integer id) {
-        return ResponseEntity.status(200).body(userService.getUserById(id));
-    }
-
-    @PutMapping("/update/{id}")
-    public ResponseEntity<ApiResponse> updateUser(@PathVariable Integer id, @Valid @RequestBody User user) {
-        userService.updateUser(id, user);
+    @PutMapping("/update")
+    public ResponseEntity<ApiResponse> updateUser(@AuthenticationPrincipal User user, @Valid @RequestBody User newUser) {
+        userService.updateUser(user.getId(), newUser);
         return ResponseEntity.status(200).body(new ApiResponse("User updated successfully"));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ApiResponse> deleteUser(@PathVariable Integer id) {
-        userService.deleteUser(id);
+    @DeleteMapping("/delete")
+    public ResponseEntity<ApiResponse> deleteUser(@AuthenticationPrincipal User user) {
+        userService.deleteUser(user.getId());
         return ResponseEntity.status(200).body(new ApiResponse("User deleted successfully"));
     }
 }

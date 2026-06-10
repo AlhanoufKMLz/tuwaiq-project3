@@ -18,23 +18,15 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public Employee getEmployeeById(Integer id) {
-        Employee employee = employeeRepository.findEmployeeById(id);
-        if (employee == null) {
-            throw new ApiException("Employee not found");
-        }
-        return employee;
-    }
-
     public void updateEmployee(Integer id, Employee updatedEmployee) {
-        Employee employee = getEmployeeById(id);
+        Employee employee = employeeRepository.findEmployeeById(id);
         employee.setPosition(updatedEmployee.getPosition());
         employee.setSalary(updatedEmployee.getSalary());
         employeeRepository.save(employee);
     }
 
     public void deleteEmployee(Integer id) {
-        Employee employee = getEmployeeById(id);
+        Employee employee = employeeRepository.findEmployeeById(id);
         employeeRepository.delete(employee);
     }
 }

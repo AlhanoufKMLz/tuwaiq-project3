@@ -56,6 +56,7 @@ public class AccountService {
         accountRepository.delete(account);
     }
 
+
     //extra endpoints
     public void activateAccount(Integer userId, Integer accountId) {
         Account account = checkAccount(accountId);

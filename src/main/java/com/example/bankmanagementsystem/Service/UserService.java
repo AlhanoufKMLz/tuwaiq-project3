@@ -1,6 +1,5 @@
 package com.example.bankmanagementsystem.Service;
 
-import com.example.bankmanagementsystem.Api.ApiException;
 import com.example.bankmanagementsystem.Model.User;
 import com.example.bankmanagementsystem.Repository.AuthRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,25 +19,8 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User getUserById(Integer id) {
-        User user = userRepository.findUserById(id);
-        if (user == null) {
-            throw new ApiException("User not found");
-        }
-        return user;
-    }
-
     public void updateUser(Integer id, User updatedUser) {
-        User user = getUserById(id);
-
-        User usernameOwner = userRepository.findUserByUsername(updatedUser.getUsername());
-        if (usernameOwner != null && !usernameOwner.getId().equals(id)) {
-            throw new ApiException("Username already exists");
-        }
-        if (updatedUser.getEmail() != null && userRepository.existsByEmail(updatedUser.getEmail())
-                && !updatedUser.getEmail().equals(user.getEmail())) {
-            throw new ApiException("Email already exists");
-        }
+        User user = userRepository.findUserById(id);
 
         user.setUsername(updatedUser.getUsername());
         user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
@@ -49,7 +31,7 @@ public class UserService {
     }
 
     public void deleteUser(Integer id) {
-        User user = getUserById(id);
+        User user = userRepository.findUserById(id);
         userRepository.delete(user);
     }
 }
